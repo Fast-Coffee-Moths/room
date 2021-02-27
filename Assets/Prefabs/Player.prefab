@@ -182,6 +182,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8906005512264354236}
+  - component: {fileID: 3713787860289558390}
   - component: {fileID: 8906005512264354237}
   - component: {fileID: 8906005512264354210}
   - component: {fileID: 8906005512264354211}
@@ -210,6 +211,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &3713787860289558390
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8906005512264354209}
+  m_Enabled: 1
 --- !u!33 &8906005512264354237
 MeshFilter:
   m_ObjectHideFlags: 0
