@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class Interacter : MonoBehaviour
 {
-    private GameObject _currentInteractableObject;
+    private InteractableObjectInterface _currentInteractableObject;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            FollowPlayer container = GameObject.Find("DraggableObjectContainer").GetComponent<FollowPlayer>();
+            GameObject bodyInteracter = GameObject.Find("BodyInteracter");
+            container.offset = bodyInteracter.transform.position - transform.position;
+            container.rotation = bodyInteracter.transform.rotation;
+            _currentInteractableObject.Interact();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        InteractableObject obj = other.gameObject.GetComponent<InteractableObject>();
+        InteractableObjectInterface obj = other.gameObject.GetComponent<InteractableObjectInterface>();
         if (obj != null)
         {
-            _currentInteractableObject = other.gameObject;
-            Debug.Log("Ready to interact with: " + other.gameObject.name);
+            _currentInteractableObject = obj;
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _currentInteractableObject = null;
     }
 }
