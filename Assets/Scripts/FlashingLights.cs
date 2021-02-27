@@ -13,11 +13,13 @@ public class FlashingLights : MonoBehaviour, IThreat
 
     public void Init()
 	{
+        state = ThreatState.ACTIVE;
         StartCoroutine(FlashNow());
     }
 
     public IEnumerator FlashNow()
     {
+
         float waitTime = friendly ? duration / 2 : duration / (level * 2);
 
         while (myLight.intensity < maxIntensity)
@@ -36,5 +38,6 @@ public class FlashingLights : MonoBehaviour, IThreat
     public void Deactivate()
 	{
         StopCoroutine(FlashNow());
+        state = ThreatState.INACTIVE;
 	}
 }

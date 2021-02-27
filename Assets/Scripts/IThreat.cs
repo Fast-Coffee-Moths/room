@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum ThreatState
+﻿public enum ThreatState
 {
     ACTIVE,
     INACTIVE
@@ -11,6 +7,7 @@ public enum ThreatState
 public interface IThreat 
 {
     void Init();
+    void Deactivate();
     //void CallEnemy();
     float duration { get; set; }
     int level { get; set; }
