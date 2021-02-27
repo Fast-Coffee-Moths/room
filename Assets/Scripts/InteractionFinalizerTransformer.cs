@@ -38,8 +38,6 @@ public class InteractionFinalizerTransformer : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        Debug.Log("Finished");
-
         yield return null;
     }
 
