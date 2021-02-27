@@ -23,19 +23,16 @@ public class MoveablePortrait : MonoBehaviour, IThreat
         offset = this.gameObject.transform.position - player.transform.position;
     }
 
-	private void Update()
-    {
-
-        PortraitFollowsPlayer();
-    }
-
     public void Init()
 	{
         state = ThreatState.ACTIVE;
         if (friendly)
 		{
             StartCoroutine(RotatePortrait());
-        }
+        } else
+		{
+            StartCoroutine(PortraitFollowsPlayer());
+		}
 	}
 
     public IEnumerator RotatePortrait()
@@ -53,7 +50,11 @@ public class MoveablePortrait : MonoBehaviour, IThreat
         portraits[index].transform.rotation = Quaternion.Slerp(rotation2, rotation1, speed * Time.deltaTime);
     }
 
-    public void PortraitFollowsPlayer() {
+    public IEnumerator PortraitFollowsPlayer() {
+
+        yield return new WaitForSeconds(duration);
+
+        state = ThreatState.ACTIVE;
 
         if (!friendly && player != null)
         {
@@ -67,18 +68,20 @@ public class MoveablePortrait : MonoBehaviour, IThreat
             if (Vector3.Distance(transform.position - offset, player.transform.position) < attackRange)
 			{
                 //Player was attacked. Respawn, call enemy or do other stuff
-			}
+
+                Deactivate();
+            }
         }
         else
         {
-            return;
+            yield return null;
         }
 
     }
 
     public void Deactivate()
 	{
-        StopCoroutine(RotatePortrait());
+        if (friendly) { StopCoroutine(RotatePortrait()); } else { StopCoroutine(PortraitFollowsPlayer()); };
         state = ThreatState.INACTIVE;
 	}
 }
