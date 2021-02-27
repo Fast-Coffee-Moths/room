@@ -6,8 +6,7 @@ namespace Events
 {
     public struct Types
     {
-        public const string ExampleEvent1 = "example-event-1";
-        public const string ExampleEvent2 = "example-event-2";
+        public const string FinalizeInteractionEvent = "finalize-interaction-event";
 
         /**
          * Contains all the events defined as public constant strings
