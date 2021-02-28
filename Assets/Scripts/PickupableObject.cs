@@ -23,29 +23,27 @@ public class PickupableObject : MonoBehaviour, InteractableObjectInterface
         {
             _interacted = false;
             this.gameObject.GetComponent<Rigidbody>().useGravity = true;
-            ChangeLayerMaskForAllChildren("Default", 0);
+            ChangeLayerMaskForAllChildren(0);
         } else
         {
             _interacted = true;
             this.gameObject.GetComponent<Rigidbody>().useGravity = false;
-            ChangeLayerMaskForAllChildren("PickedUpObject", 12);
+            ChangeLayerMaskForAllChildren(12);
         }
     }
 
-    void ChangeLayerMaskForAllChildren(string layerName, int layerID)
+    void ChangeLayerMaskForAllChildren(int layerID)
     {
         foreach (Transform child in transform)
         {
-            ChangeLayerMask(child, "layerName", layerID);
+            Debug.Log(child.transform.name);
+            ChangeLayerMask(child, layerID);
         }
     }
 
-    void ChangeLayerMask(Transform obj, string layerName, int layerID)
+    void ChangeLayerMask(Transform obj, int layerID)
     {
-        if (layerName != null)
-        {
-            obj.gameObject.layer = layerID;
-        }
+        obj.gameObject.layer = layerID;
     }
 
     void Update()
