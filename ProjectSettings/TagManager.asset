@@ -16,8 +16,8 @@ TagManager:
   - 
   - BodyInteracter
   - CameraInteracter
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 
