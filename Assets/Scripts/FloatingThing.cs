@@ -3,13 +3,14 @@
 public class FloatingThing : MonoBehaviour, IThreat
 {
     [SerializeField] private int thingLevel;
-    [SerializeField] private bool friendlyThing;
+    [SerializeField] private bool friendlyThing = true;
     public float duration { get; set; } 
     public bool friendly { get; set; }
     public int level { get; set; }
     public ThreatState state { get; set; }
     private bool activated;
     private int _nEncounters;
+    private bool _hasReachedPlayer;
 
     [SerializeField]
     private ParticleSystem explosionPrefab;
@@ -23,18 +24,18 @@ public class FloatingThing : MonoBehaviour, IThreat
     public void Init()
 	{
         thingLevel = level;
-        friendlyThing = friendly;
+        friendly = friendlyThing;
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
         activated = true;
-        friendly = true;
+        _hasReachedPlayer = false;
         _nEncounters = 0;
         player = GameObject.Find("Player");
 	}
 
     private void Update()
     {
-        if (activated && !friendly)
+        if (activated && !friendly && !_hasReachedPlayer)
 		{
             // chase player
             transform.LookAt(player.transform);
@@ -70,9 +71,13 @@ public class FloatingThing : MonoBehaviour, IThreat
         {
             // chase player
             friendly = false;
+            gameObject.GetComponent<SphereCollider>().radius = 0.5f;
             gameObject.GetComponent<Rigidbody>().useGravity = false;
+            transform.Find("PhysicsCollider").GetComponent<SphereCollider>().enabled = false;
+
         } else
         {
+            _hasReachedPlayer = true;
             Events.SimpleEventSystem.TriggerEvent("player-loss-event");
         }
     }

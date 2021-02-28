@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6182524027818548603}
   - component: {fileID: 7642811952141094214}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: PhysicsCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,8 +90,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: -0.2, y: 0.3, z: 0}
+  m_Radius: 1
+  m_Center: {x: -0.15, y: 0.3, z: 0}
 --- !u!54 &2242008550851954281
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -120,10 +120,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e1c9383bf9a32e459314d1337fe0864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thingLevel: 0
+  friendlyThing: 1
+  explosionPrefab: {fileID: 0}
+  _floatSinamplitude: 0.5
+  _floatSinFrequency: 1
   _enemyChaseSpeed: 1
-  degreesPerSecond: 15
-  amplitude: 0.5
-  frequency: 1
 --- !u!1001 &6635526347895364123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -154,7 +156,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
