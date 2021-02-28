@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class MoveablePortrait : MonoBehaviour, IThreat
 {
+    [SerializeField] private int thingLevel;
+    [SerializeField] private bool friendlyPortrait;
+
     public float duration { get; set; }
-    public float maxIntensity; 
     public GameObject[] portraits;
     public GameObject player;
     public bool friendly { get; set; }
@@ -25,6 +27,8 @@ public class MoveablePortrait : MonoBehaviour, IThreat
 
     public void Init()
 	{
+        thingLevel = level;
+        friendlyPortrait = friendly;
         state = ThreatState.ACTIVE;
         if (friendly)
 		{
@@ -83,5 +87,6 @@ public class MoveablePortrait : MonoBehaviour, IThreat
 	{
         if (friendly) { StopCoroutine(RotatePortrait()); } else { StopCoroutine(PortraitFollowsPlayer()); };
         state = ThreatState.INACTIVE;
+        level += 1;
 	}
 }

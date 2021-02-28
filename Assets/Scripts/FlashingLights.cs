@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FlashingLights : MonoBehaviour, IThreat
 {
-
+    [SerializeField] private int lightLevel;
     public float duration { get; set; } // The total of seconds the flash wil last
     public float maxIntensity; // The maximum intensity the flash will reach
     public Light myLight;        // light
@@ -13,6 +13,7 @@ public class FlashingLights : MonoBehaviour, IThreat
 
     public void Init()
 	{
+        lightLevel = level;
         state = ThreatState.ACTIVE;
         StartCoroutine(FlashNow());
     }

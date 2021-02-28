@@ -1,14 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FloatingThing : MonoBehaviour, IThreat
 {
+    [SerializeField] private int thingLevel;
+    [SerializeField] private bool friendlyThing;
     public float duration { get; set; } 
     public bool friendly { get; set; }
     public int level { get; set; }
     public ThreatState state { get; set; }
     private bool activated;
+
+    [SerializeField]
+    private ParticleSystem explosionPrefab;
 
     public GameObject player;
 
@@ -24,8 +27,10 @@ public class FloatingThing : MonoBehaviour, IThreat
 
     private float attackRange = 5.0f;
 
-    public void Init()
+	public void Init()
 	{
+        thingLevel = level;
+        friendlyThing = friendly;
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
         offset = this.gameObject.transform.position - player.transform.position;
@@ -77,7 +82,8 @@ public class FloatingThing : MonoBehaviour, IThreat
 
     private void Explode()
 	{
-        //Play particle effects
+        explosionPrefab.Play();
+        //AudioManager plays explosion SFX
         //Player dies and respawns
         gameObject.SetActive(false);
         Deactivate();
