@@ -8,6 +8,11 @@ public class DraggableObject : MonoBehaviour, InteractableObjectInterface
     private bool _interacted = false;
     private GameObject _container;
 
+    public bool IsInteracting()
+    {
+        return _interacted;
+    }
+
     public void Interact()
     {
         _container = GameObject.Find("DraggableObjectContainer");
