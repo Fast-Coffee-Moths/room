@@ -29,8 +29,8 @@ public class FloatingThing : MonoBehaviour, IThreat
 
 	public void Init()
 	{
-        thingLevel = level;
-        friendlyThing = friendly;
+        level = thingLevel;
+        friendly = friendlyThing;
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
         offset = this.gameObject.transform.position - player.transform.position;
