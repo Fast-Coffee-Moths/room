@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FloatingThing : MonoBehaviour, IThreat
 {
+    [SerializeField] private int thingLevel;
+    [SerializeField] private bool friendlyThing;
     public float duration { get; set; } 
     public bool friendly { get; set; }
     public int level { get; set; }
@@ -11,6 +11,8 @@ public class FloatingThing : MonoBehaviour, IThreat
     private bool activated;
     private int _nEncounters;
 
+    [SerializeField]
+    private ParticleSystem explosionPrefab;
     private GameObject player;
 
     // User Inputs
@@ -20,6 +22,8 @@ public class FloatingThing : MonoBehaviour, IThreat
 
     public void Init()
 	{
+        thingLevel = level;
+        friendlyThing = friendly;
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
         activated = true;
@@ -45,6 +49,15 @@ public class FloatingThing : MonoBehaviour, IThreat
 	{
         activated = false;
         state = ThreatState.INACTIVE;
+    }
+
+    private void Explode()
+    {
+        explosionPrefab.Play();
+        //AudioManager plays explosion SFX
+        //Player dies and respawns
+        gameObject.SetActive(false);
+        Deactivate();
     }
 
     private void OnTriggerEnter(Collider other)
