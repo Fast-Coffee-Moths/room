@@ -18,59 +18,29 @@ public class SpawnableShowHideThing : MonoBehaviour, IThreat
     public bool friendly { get; set; }
     public int level { get; set; }
     public ThreatState state { get; set; }
-    private bool show = true;
-    private float attackRange;
+    private float attackRange = 2f;
 
-    public void  Init()
+	public void  Init()
 	{
-        Assert.IsNotNull(spawnPositions);
-
-        thingLevel = level;
-        friendlyThing = friendly;
-
-        if (show)
-		{
-            StartCoroutine(Show());
-		}
-        else
-		{
-            StartCoroutine(Hide());
-		}
+        InvokeRepeating("Show", 1f, Random.Range(1, 5));
 	}
 
     public void Deactivate()
 	{
-        StopAllCoroutines();
+        CancelInvoke("Show");
         gameObject.SetActive(false);
         level += 1;
 	}
 
-    private IEnumerator Show()
-	{
-        show = true;
-
-        yield return new WaitForSeconds(duration + 2/level);
-
-        transform.position = spawnPositions[Random.Range(0, spawnPositions.Length)].position;
-
-        gameObject.SetActive(true);
+    private void Show()
+    {
+        transform.position = spawnPositions[Random.Range(0, spawnPositions.Length - 1)].position;
 
         if (!friendly && Vector3.Distance(transform.position, player.transform.position) < attackRange)
-		{
+        {
             Explode();
-		}
+        }
 
-        yield return new WaitForSeconds(duration + 2/level);
-
-        StartCoroutine(Hide());
-	}
-
-    private IEnumerator Hide()
-	{
-        show = false;
-        gameObject.SetActive(false);
-        yield return new WaitForSeconds(duration + 2/level);
-        StartCoroutine(Show());
     }
 
     private void Explode()
