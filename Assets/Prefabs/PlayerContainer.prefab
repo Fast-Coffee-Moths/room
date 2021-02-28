@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaeffe90d3f3a0d4a903522b39417477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 5ae0a288f3b8e71d08ac5a4e437f433b, type: 2}
+  _speedWhileDraggingObject: 1
 --- !u!65 &1488442132
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69,6 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaeffe90d3f3a0d4a903522b39417477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 5ae0a288f3b8e71d08ac5a4e437f433b, type: 2}
+  _speedWhileDraggingObject: 1
 --- !u!1 &1926560499711146082
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,6 +169,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8528432216084533846}
     m_Modifications:
+    - target: {fileID: 3126129029036809858, guid: 868accd18c8d0755baebccd7240a6c02,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5486060732547130744, guid: 868accd18c8d0755baebccd7240a6c02,
         type: 3}
       propertyPath: m_LocalScale.x

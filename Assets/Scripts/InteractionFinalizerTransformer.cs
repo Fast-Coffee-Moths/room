@@ -55,7 +55,12 @@ public class InteractionFinalizerTransformer : MonoBehaviour
             return;
         }
 
-        if (target.GetInstanceID() != other.gameObject.GetInstanceID() || !IsOrientationValid(other.transform.rotation)) return;
+        GameObject gameObject = other.gameObject;
+        if (target.GetInstanceID() != gameObject.GetInstanceID()) {
+            gameObject = gameObject.transform.parent.gameObject;
+        }
+
+        if (target.GetInstanceID() != gameObject.GetInstanceID() || !IsOrientationValid(gameObject.transform.rotation)) return;
 
         _finalizer.FinalizeInteraction();
         StartCoroutine(UpdateTargetTransform());
