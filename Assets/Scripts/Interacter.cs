@@ -1,20 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Data;
+using Events;
 using UnityEngine;
 
 public class Interacter : MonoBehaviour
 {
     private InteractableObjectInterface _currentInteractableObject;
+    [SerializeField] private PlayerData playerData;
     private float _originalSpeedValue;
     private bool _isDraggable = false;
     private bool _isDragging = false;
-    private FirstPersonMovement _movement;
     [SerializeField] float _speedWhileDraggingObject = 1f;
 
-    private void Awake()
+    private void Start()
     {
-        _movement = gameObject.GetComponent<FirstPersonMovement>();
-        _originalSpeedValue = _movement.playerData.speed;
+        _originalSpeedValue = playerData.speed;
+    }
+
+    private void OnEnable()
+    {
+        SimpleEventSystem.AddListener(Events.Types.InteractableDemandsInteractionCeasesEvent, StopCurrentInteraction);
+    }
+
+    private void OnDisable()
+    {
+        SimpleEventSystem.RemoveListener(Events.Types.InteractableDemandsInteractionCeasesEvent, StopCurrentInteraction);
     }
 
     private void Update()
@@ -36,13 +45,19 @@ public class Interacter : MonoBehaviour
     {
         if (_isDragging)
         {
-            _movement.playerData.speed = _originalSpeedValue;
+            playerData.speed = _originalSpeedValue;
             _isDragging = false;
         } else
         {
-            _movement.playerData.speed = _speedWhileDraggingObject;
+            playerData.speed = _speedWhileDraggingObject;
             _isDragging = true;
         }
+    }
+
+    private void StopCurrentInteraction()
+    {
+        if (!ReferenceEquals(_currentInteractableObject, null) && _currentInteractableObject.IsInteracting())
+            _currentInteractableObject.Interact();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -64,8 +79,9 @@ public class Interacter : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        StopCurrentInteraction();
         _currentInteractableObject = null;
         _isDraggable = false;
-        _movement.playerData.speed = _originalSpeedValue;
+        playerData.speed = _originalSpeedValue;
     }
 }

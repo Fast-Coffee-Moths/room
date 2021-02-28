@@ -7,6 +7,11 @@ public class PickupableObject : MonoBehaviour, InteractableObjectInterface
     private GameObject _currentTarget;
     private bool _interacted = false;
 
+    public bool IsInteracting()
+    {
+        return _interacted;
+    }
+
     public void Interact()
     {
         ToggleInteraction();
