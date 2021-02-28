@@ -22,10 +22,15 @@ public class FloatingThing : MonoBehaviour, IThreat
     private Vector3 offset;
 
     // Position Storage Variables
-    Vector3 posOffset = new Vector3();
+    Vector3 posOffset = new Vector3(0f, 3f, 0f);
     Vector3 tempPos = new Vector3();
 
     private float attackRange = 5.0f;
+
+	private void Start()
+	{
+        Init();
+	}
 
 	public void Init()
 	{
