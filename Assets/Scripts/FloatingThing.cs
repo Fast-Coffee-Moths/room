@@ -3,12 +3,14 @@
 public class FloatingThing : MonoBehaviour, IThreat
 {
     [SerializeField] private int thingLevel;
-    [SerializeField] private bool friendlyThing;
-    public float duration { get; set; } 
+    [SerializeField] private bool friendlyThing = true;
+    public float duration { get; set; }
     public bool friendly { get; set; }
     public int level { get; set; }
     public ThreatState state { get; set; }
     private bool activated;
+    private int _nEncounters;
+    private bool _hasReachedPlayer;
 
     [SerializeField]
     private ParticleSystem explosionPrefab;
@@ -19,6 +21,7 @@ public class FloatingThing : MonoBehaviour, IThreat
     public float degreesPerSecond = 15.0f;
     public float amplitude = 0.5f;
     public float frequency = 1f;
+    public float _enemyChaseSpeed = 1f;
     private Vector3 offset;
 
     // Position Storage Variables
@@ -38,33 +41,30 @@ public class FloatingThing : MonoBehaviour, IThreat
         friendly = friendlyThing;
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
-        offset = this.gameObject.transform.position - player.transform.position;
+        _hasReachedPlayer = false;
+        _nEncounters = 0;
         activated = true;
-	}
+        player = GameObject.Find("Player");
+    }
 
     private void Update()
     {
+        Debug.Log("activated: " + activated);
+        Debug.Log("friendly: " + friendly);
+        Debug.Log("reached: " + _hasReachedPlayer);
+        if (activated && !friendly && !_hasReachedPlayer)
+        {
+            Debug.Log("chase!");
+            // chase player
+            transform.LookAt(player.transform);
+            friendly = false;
+            gameObject.GetComponent<SphereCollider>().radius = 0.5f;
+            gameObject.GetComponent<Rigidbody>().useGravity = false;
+            transform.Find("Collider").GetComponent<SphereCollider>().enabled = false;
+            Vector3 floati = new Vector3(0, Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude, 0);
 
-        if (activated && friendly)
-		{
-            Float();
-
-        } else if (activated && !friendly)
-		{
-            if (Vector3.Distance(transform.position - offset, player.transform.position) < attackRange)
-			{
-                Float();
-                if (Random.Range(0, 100 / level) > 50)
-                {
-                    Explode();
-                }
-			}
-
-		} else
-		{
-            return;
-		}
-        
+            transform.position += (transform.forward + floati) * _enemyChaseSpeed * Time.deltaTime;
+        }
     }
     
     public void Deactivate()
@@ -73,24 +73,26 @@ public class FloatingThing : MonoBehaviour, IThreat
         state = ThreatState.INACTIVE;
     }
 
-    private void Float()
-	{
-        // Spin object around Y-Axis
-        transform.Rotate(new Vector3(0f, Time.deltaTime * degreesPerSecond, 0f), Space.World);
-
-        // Float up/down with a Sin()
-        tempPos = posOffset;
-        tempPos.y += Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude;
-
-        transform.position = tempPos;
+    private void OnTriggerEnter(Collider other)
+    {
+        _nEncounters += 1;
+        if (_nEncounters < 3)
+        {
+            Events.SimpleEventSystem.TriggerEvent("move-enemy-to-random-position");
+        }
+        else if (_nEncounters == 3)
+        {
+            // chase player
+            friendly = false;
+            gameObject.GetComponent<SphereCollider>().radius = 0.5f;
+            gameObject.GetComponent<Rigidbody>().useGravity = false;
+            transform.Find("Collider").GetComponent<SphereCollider>().enabled = false;
+        }
+        else
+        {
+            _hasReachedPlayer = true;
+            Events.SimpleEventSystem.TriggerEvent("player-loss-event");
+        }
     }
 
-    private void Explode()
-	{
-        explosionPrefab.Play();
-        //AudioManager plays explosion SFX
-        //Player dies and respawns
-        gameObject.SetActive(false);
-        Deactivate();
-	}
 }

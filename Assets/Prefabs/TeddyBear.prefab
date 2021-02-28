@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 7722131276765496077}
   - component: {fileID: 5560125223134079612}
   - component: {fileID: 7682269465800154788}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TeddyBear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,10 +123,11 @@ MonoBehaviour:
   thingLevel: 0
   friendlyThing: 1
   explosionPrefab: {fileID: 0}
-  player: {fileID: 0}
+  player: {fileID: 8906005512264354209, guid: 868accd18c8d0755baebccd7240a6c02, type: 3}
   degreesPerSecond: 15
   amplitude: 0.5
   frequency: 1
+  _enemyChaseSpeed: 1
 --- !u!1001 &6635526347895364123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -172,22 +173,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
@@ -197,7 +198,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaee79b57a029de689937e7cf13d4d82,
         type: 3}

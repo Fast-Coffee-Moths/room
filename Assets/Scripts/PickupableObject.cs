@@ -23,10 +23,28 @@ public class PickupableObject : MonoBehaviour, InteractableObjectInterface
         {
             _interacted = false;
             this.gameObject.GetComponent<Rigidbody>().useGravity = true;
+            ChangeLayerMaskForAllChildren("Default", 0);
         } else
         {
             _interacted = true;
             this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            ChangeLayerMaskForAllChildren("PickedUpObject", 12);
+        }
+    }
+
+    void ChangeLayerMaskForAllChildren(string layerName, int layerID)
+    {
+        foreach (Transform child in transform)
+        {
+            ChangeLayerMask(child, "layerName", layerID);
+        }
+    }
+
+    void ChangeLayerMask(Transform obj, string layerName, int layerID)
+    {
+        if (layerName != null)
+        {
+            obj.gameObject.layer = layerID;
         }
     }
 
@@ -34,6 +52,7 @@ public class PickupableObject : MonoBehaviour, InteractableObjectInterface
     {
         if (_interacted)
         {
+            transform.rotation = _currentTarget.transform.parent.gameObject.transform.rotation;
             this.transform.position = _currentTarget.transform.position;
         }
     }
