@@ -11,9 +11,9 @@ public class FlashingLights : MonoBehaviour, IThreat
     public int level { get; set; }
     public ThreatState state { get; set; }
 
-    public void Init()
+	public void Init()
 	{
-        lightLevel = level;
+        level = lightLevel;
         state = ThreatState.ACTIVE;
         StartCoroutine(FlashNow());
     }
@@ -21,7 +21,7 @@ public class FlashingLights : MonoBehaviour, IThreat
     public IEnumerator FlashNow()
     {
 
-        float waitTime = friendly ? duration / 2 : duration / (level * 2);
+        float waitTime = 0.2f;
 
         while (myLight.intensity < maxIntensity)
         {
@@ -33,12 +33,14 @@ public class FlashingLights : MonoBehaviour, IThreat
             myLight.intensity -= Time.deltaTime / waitTime;        //Decrease intensity
             yield return null;
         }
-        yield return null;
+
+        StartCoroutine(FlashNow());
     }
 
     public void Deactivate()
 	{
         StopCoroutine(FlashNow());
         state = ThreatState.INACTIVE;
+        level += 1;
 	}
 }
