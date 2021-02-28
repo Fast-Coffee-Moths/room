@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 2389719336843117819}
-  effectTime: 1.75
+  effectTime: 1.25
   baseMaterialColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 0.7490196}
   fadeOutIntensityOverTime:
     serializedVersion: 2
