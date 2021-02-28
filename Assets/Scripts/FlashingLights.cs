@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FlashingLights : MonoBehaviour, IThreat
 {
-
+    [SerializeField] private int lightLevel;
     public float duration { get; set; } // The total of seconds the flash wil last
     public float maxIntensity; // The maximum intensity the flash will reach
     public Light myLight;        // light
@@ -11,8 +11,9 @@ public class FlashingLights : MonoBehaviour, IThreat
     public int level { get; set; }
     public ThreatState state { get; set; }
 
-    public void Init()
+	public void Init()
 	{
+        level = lightLevel;
         state = ThreatState.ACTIVE;
         StartCoroutine(FlashNow());
     }
@@ -20,7 +21,7 @@ public class FlashingLights : MonoBehaviour, IThreat
     public IEnumerator FlashNow()
     {
 
-        float waitTime = friendly ? duration / 2 : duration / (level * 2);
+        float waitTime = 0.2f;
 
         while (myLight.intensity < maxIntensity)
         {
@@ -32,12 +33,14 @@ public class FlashingLights : MonoBehaviour, IThreat
             myLight.intensity -= Time.deltaTime / waitTime;        //Decrease intensity
             yield return null;
         }
-        yield return null;
+
+        StartCoroutine(FlashNow());
     }
 
     public void Deactivate()
 	{
         StopCoroutine(FlashNow());
         state = ThreatState.INACTIVE;
+        level += 1;
 	}
 }

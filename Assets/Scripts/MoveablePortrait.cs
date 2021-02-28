@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveablePortrait : MonoBehaviour, IThreat
 {
+    [SerializeField] private int thingLevel;
+    [SerializeField] private bool friendlyPortrait;
+
     public float duration { get; set; }
-    public float maxIntensity; 
-    public GameObject[] portraits;
     public GameObject player;
     public bool friendly { get; set; }
     public int level { get; set; }
@@ -15,16 +15,21 @@ public class MoveablePortrait : MonoBehaviour, IThreat
     private Quaternion rotation2 = Quaternion.Euler(45f, 0f, 0f);
     public ThreatState state { get; set; }
     public float followSharpness = 0.1f;
-    private float attackRange = 3f;
+    private float attackRange = 0.2f;
     private Vector3 offset;
+    private Vector3 initialPos;
 
 	private void Awake()
 	{
-        offset = this.gameObject.transform.position - player.transform.position;
+        initialPos = gameObject.transform.position;
+        offset = gameObject.transform.position - player.transform.position;
     }
 
-    public void Init()
+	public void Init()
 	{
+        level = thingLevel;
+        friendly = friendlyPortrait;
+        duration = 2.0f;
         state = ThreatState.ACTIVE;
         if (friendly)
 		{
@@ -37,17 +42,15 @@ public class MoveablePortrait : MonoBehaviour, IThreat
 
     public IEnumerator RotatePortrait()
 	{
-        yield return new WaitForSeconds(duration);
-
-        int index = Random.Range(0, portraits.Length);
+        yield return new WaitForSeconds(Random.Range(duration, 5.0f));
         
-        portraits[index].transform.rotation = Quaternion.Slerp(rotation1, rotation2, speed * Time.deltaTime);
-
-        duration /= level;
+        transform.rotation = Quaternion.Slerp(rotation1, rotation2, speed * Time.deltaTime);
 
         yield return new WaitForSeconds(duration);
 
-        portraits[index].transform.rotation = Quaternion.Slerp(rotation2, rotation1, speed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(rotation2, rotation1, speed * Time.deltaTime);
+
+        StartCoroutine(RotatePortrait());
     }
 
     public IEnumerator PortraitFollowsPlayer() {
@@ -56,7 +59,7 @@ public class MoveablePortrait : MonoBehaviour, IThreat
 
         state = ThreatState.ACTIVE;
 
-        if (!friendly && player != null)
+        if (player != null)
         {
             float blend = 1f - Mathf.Pow(1f - followSharpness, Time.deltaTime * 30f);
 
@@ -65,23 +68,21 @@ public class MoveablePortrait : MonoBehaviour, IThreat
                    player.transform.position + offset,
                    blend);
 
-            if (Vector3.Distance(transform.position - offset, player.transform.position) < attackRange)
-			{
-                //Player was attacked. Respawn, call enemy or do other stuff
-
-                Deactivate();
-            }
+            yield return new WaitForSeconds(0.5f);
+            transform.position = initialPos;
         }
         else
         {
             yield return null;
         }
 
+        StartCoroutine(PortraitFollowsPlayer());
     }
 
     public void Deactivate()
 	{
         if (friendly) { StopCoroutine(RotatePortrait()); } else { StopCoroutine(PortraitFollowsPlayer()); };
         state = ThreatState.INACTIVE;
+        level += 1;
 	}
 }
