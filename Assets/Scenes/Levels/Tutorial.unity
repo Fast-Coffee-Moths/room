@@ -7452,7 +7452,7 @@ GameObject:
   - component: {fileID: 658247705}
   - component: {fileID: 658247706}
   - component: {fileID: 658247707}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: RoomEventTriggerer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
