@@ -9,52 +9,36 @@ public class FloatingThing : MonoBehaviour, IThreat
     public int level { get; set; }
     public ThreatState state { get; set; }
     private bool activated;
+    private int _nEncounters;
 
-    public GameObject player;
+    private GameObject player;
 
     // User Inputs
-    public float degreesPerSecond = 15.0f;
-    public float amplitude = 0.5f;
-    public float frequency = 1f;
-    private Vector3 offset;
-
-    // Position Storage Variables
-    Vector3 posOffset = new Vector3();
-    Vector3 tempPos = new Vector3();
-
-    private float attackRange = 5.0f;
+    [SerializeField] private float _floatSinamplitude = 0.5f;
+    [SerializeField] private float _floatSinFrequency = 1f;
+    [SerializeField] private float _enemyChaseSpeed = 1f;
 
     public void Init()
 	{
         state = ThreatState.ACTIVE;
         gameObject.SetActive(true);
-        offset = this.gameObject.transform.position - player.transform.position;
         activated = true;
+        friendly = true;
+        _nEncounters = 0;
+        player = GameObject.Find("Player");
 	}
 
     private void Update()
     {
-
-        if (activated && friendly)
+        if (activated && !friendly)
 		{
-            Float();
+            // chase player
+            transform.LookAt(player.transform);
 
-        } else if (activated && !friendly)
-		{
-            if (Vector3.Distance(transform.position - offset, player.transform.position) < attackRange)
-			{
-                Float();
-                if (Random.Range(0, 100 / level) > 50)
-                {
-                    Explode();
-                }
-			}
+            Vector3 floati = new Vector3(0, Mathf.Sin(Time.fixedTime * Mathf.PI * _floatSinFrequency) * _floatSinamplitude, 0);
 
-		} else
-		{
-            return;
-		}
-        
+            transform.position += (transform.forward + floati) * _enemyChaseSpeed * Time.deltaTime;
+        }
     }
     
     public void Deactivate()
@@ -63,23 +47,20 @@ public class FloatingThing : MonoBehaviour, IThreat
         state = ThreatState.INACTIVE;
     }
 
-    private void Float()
-	{
-        // Spin object around Y-Axis
-        transform.Rotate(new Vector3(0f, Time.deltaTime * degreesPerSecond, 0f), Space.World);
-
-        // Float up/down with a Sin()
-        tempPos = posOffset;
-        tempPos.y += Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude;
-
-        transform.position = tempPos;
+    private void OnTriggerEnter(Collider other)
+    {
+        _nEncounters += 1;
+        if (_nEncounters < 3)
+        {
+            Events.SimpleEventSystem.TriggerEvent("move-enemy-to-random-position");
+        } else if (_nEncounters == 3)
+        {
+            // chase player
+            friendly = false;
+            gameObject.GetComponent<Rigidbody>().useGravity = false;
+        } else
+        {
+            Events.SimpleEventSystem.TriggerEvent("player-loss-event");
+        }
     }
-
-    private void Explode()
-	{
-        //Play particle effects
-        //Player dies and respawns
-        gameObject.SetActive(false);
-        Deactivate();
-	}
 }
